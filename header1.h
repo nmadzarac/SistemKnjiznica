@@ -4,5 +4,6 @@
 void prijava();
 int izbornik(int admin);
 void clearInputBuffer();
+int compareByTitle(const void* a, const void* b);
 
 #endif // HEADER1_H
