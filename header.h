@@ -22,16 +22,6 @@ enum Opcije {
     izlazIzPrograma
 };
 
-typedef enum {
-    ROMAN = 1,
-    HORROR,
-    FANTAZIJA,
-    ZNANSTVENA_FANTASTIKA,
-    KOMEDIJA,
-    DRAMA,
-    OSTALO
-} ZANR;
-
 void dodajKnjigu();
 void obrisiKnjigu();
 void popisKnjiga();
