@@ -1,3 +1,4 @@
+
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
@@ -54,6 +55,7 @@ void prijava() {
 
 int izbornik(int admin) {
     while (1) {
+        printf("\n=========================================================================");
         printf("\nIZBORNIK --- odaberite opciju:\n");
         printf("\tOpcija 1: Dodavanje knjiga\n");
         printf("\tOpcija 2: Brisanje knjiga\n");
