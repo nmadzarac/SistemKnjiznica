@@ -67,7 +67,8 @@ void obrisiKnjigu() {
     printf("Unesite ID knjige za brisanje: ");
     scanf("%d", &id);
 
-    KNJIGA* knjige = (KNJIGA*)calloc(100, sizeof(KNJIGA));
+    static int a = 100;
+    KNJIGA* knjige = (KNJIGA*)calloc(a, sizeof(KNJIGA));
     if (knjige == NULL) {
         perror("Error alociranja memorije");
         fclose(fp);
@@ -116,8 +117,9 @@ void popisKnjiga() {
         perror("Error: Neuspjesno otvaranje datoteke.");
         return;
     }
-
-    KNJIGA* knjige = (KNJIGA*)calloc(100, sizeof(KNJIGA));
+    
+    static int a = 100;
+    KNJIGA* knjige = (KNJIGA*)calloc(a, sizeof(KNJIGA));
     if (knjige == NULL) {
         perror("Error alociranja memorije");
         fclose(fp);
@@ -158,7 +160,8 @@ void pretrazivanjeKnjiga() {
         return;
     }
 
-    KNJIGA* knjige = (KNJIGA*)calloc(100, sizeof(KNJIGA));
+    static int a = 100;
+    KNJIGA* knjige = (KNJIGA*)calloc(a, sizeof(KNJIGA));
     if (knjige == NULL) {
         perror("Error alociranja memorije");
         fclose(fp);
@@ -178,7 +181,7 @@ void pretrazivanjeKnjiga() {
     }
 
     char pojam[50];
-    printf("Unesite pojam za pretragu (Naslov, zanr ili autor) : ");
+    printf("Unesite pojam za pretragu (Naslov, autor ili zanr) : ");
     clearInputBuffer();
     fgets(pojam, sizeof(pojam), stdin);
     pojam[strcspn(pojam, "\n")] = 0;
@@ -213,7 +216,8 @@ void sortirajKnjigePoNaslovu() {
         return;
     }
 
-    KNJIGA* knjige = (KNJIGA*)calloc(100, sizeof(KNJIGA));
+    static int a = 100;
+    KNJIGA* knjige = (KNJIGA*)calloc(a, sizeof(KNJIGA));
     if (knjige == NULL) {
         perror("Error alociranja memorije");
         fclose(fp);
