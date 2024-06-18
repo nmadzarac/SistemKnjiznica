@@ -1,3 +1,4 @@
+#pragma once
 #ifndef HEADER_H
 #define HEADER_H
 
@@ -22,6 +23,13 @@ enum Opcije {
     izlazIzPrograma
 };
 
+enum OpcijePretrage {
+    pretraziPoNaslovu = 1,
+    pretraziPoAutoru,
+    pretraziPoZanru,
+    pretraziPoId
+};
+
 void dodajKnjigu();
 void obrisiKnjigu();
 void popisKnjiga();
@@ -31,3 +39,4 @@ void posudbaKnjige();
 void vracanjeKnjige();
 
 #endif // HEADER_H
+
