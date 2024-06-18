@@ -23,8 +23,6 @@ void prijava() {
         }
 
         if (izbor == 1) {
-            printf("Unesite korisnicko ime: ");
-            scanf("%s", username);
             admin = 0;
             break;
         }
