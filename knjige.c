@@ -178,7 +178,7 @@ void pretrazivanjeKnjiga() {
     }
 
     char pojam[50];
-    printf("Unesite pojam za pretragu: ");
+    printf("Unesite pojam za pretragu (Naslov, zanr ili autor) : ");
     clearInputBuffer();
     fgets(pojam, sizeof(pojam), stdin);
     pojam[strcspn(pojam, "\n")] = 0;
