@@ -1,3 +1,4 @@
+
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
@@ -104,7 +105,8 @@ void obrisiKnjigu() {
 
     if (!pronadenaKnjiga) {
         printf("Knjiga s ID-om %d nije pronadjena.\n", id);
-    } else {
+    }
+    else {
         printf("Knjiga je uspjesno obrisana.\n");
     }
 
@@ -120,7 +122,7 @@ void popisKnjiga() {
         perror("Error: Neuspjesno otvaranje datoteke.");
         return;
     }
-    
+
     static int a = 100;
     KNJIGA* knjige = (KNJIGA*)calloc(a, sizeof(KNJIGA));
     if (knjige == NULL) {
@@ -159,14 +161,14 @@ void popisKnjiga() {
 void pretrazivanjeKnjiga() {
     FILE* fp = fopen("knjiznica.bin", "rb");
     if (fp == NULL) {
-        perror("Error: Neuspjesno otvaranje datoteke.");
+        perror("Greška pri otvaranju datoteke.");
         return;
     }
 
     static int a = 100;
     KNJIGA* knjige = (KNJIGA*)calloc(a, sizeof(KNJIGA));
     if (knjige == NULL) {
-        perror("Error alociranja memorije");
+        perror("Greška alociranja memorije.");
         fclose(fp);
         return;
     }
@@ -178,37 +180,114 @@ void pretrazivanjeKnjiga() {
     fclose(fp);
 
     if (brojKnjiga == 0) {
-        printf("Nema knjiga u knjiznici.\n");
+        printf("Nema knjiga u knjižnici.\n");
         free(knjige);
         return;
     }
 
-    // Sortiranje knjiga po naslovu
-    qsort(knjige, brojKnjiga, sizeof(KNJIGA), compareByTitle);
+    int opcija;
+    printf("Odaberite kriterij pretrage:\n");
+    printf("1. Pretrazi po naslovu\n");
+    printf("2. Pretrazi po autoru\n");
+    printf("3. Pretrazi po žanru\n");
+    printf("4. Pretrazi po ID-u\n");
+    if (scanf("%d", &opcija) != 1 || opcija < 1 || opcija > 4) {
+        printf("\nNeispravan odabir. Prekid pretrage.\n");
+        free(knjige);
+        return;
+    }
+    clearInputBuffer();
 
     char pojam[50];
-    printf("Unesite naslov knjige za pretragu: ");
-    clearInputBuffer();
-    fgets(pojam, sizeof(pojam), stdin);
-    pojam[strcspn(pojam, "\n")] = 0;
-
-    KNJIGA key;
-    strcpy(key.naslov, pojam);
-
-    KNJIGA* found = (KNJIGA*)bsearch(&key, knjige, brojKnjiga, sizeof(KNJIGA), compareByTitle);
-
-    if (found != NULL) {
-        printf("\nID: %d\n", found->id);
-        printf("Naslov: %s\n", found->naslov);
-        printf("Zanr: %s\n", found->zanr);
-        printf("Godina izdanja: %d\n", found->godina);
-        printf("Autor: %s\n", found->autor);
-        printf("Posudena: %s\n", found->posudena ? "Da" : "Ne");
-        if (found->posudena) {
-            printf("Korisnik: %s\n", found->korisnik);
+    switch (opcija) {
+    case pretraziPoNaslovu:
+        printf("\nUnesite naslov knjige za pretragu: ");
+        fgets(pojam, sizeof(pojam), stdin);
+        pojam[strcspn(pojam, "\n")] = 0;
+        for (int i = 0; i < brojKnjiga; i++) {
+            if (strstr(knjige[i].naslov, pojam) != NULL) {
+                printf("\nKnjiga je uspjesno pronadena.\n");
+                printf("\nID: %d\n", knjige[i].id);
+                printf("Naslov: %s\n", knjige[i].naslov);
+                printf("Zanr: %s\n", knjige[i].zanr);
+                printf("Godina izdanja: %d\n", knjige[i].godina);
+                printf("Autor: %s\n", knjige[i].autor);
+                printf("Posudena: %s\n", knjige[i].posudena ? "Da" : "Ne");
+                if (knjige[i].posudena) {
+                    printf("Korisnik: %s\n", knjige[i].korisnik);
+                }
+                printf("\n");
+            }
         }
-    } else {
-        printf("Knjiga s naslovom \"%s\" nije pronadjena.\n", pojam);
+        break;
+    case pretraziPoAutoru:
+        printf("\nUnesite ime autora za pretragu: ");
+        fgets(pojam, sizeof(pojam), stdin);
+        pojam[strcspn(pojam, "\n")] = 0;
+        for (int i = 0; i < brojKnjiga; i++) {
+            if (strstr(knjige[i].autor, pojam) != NULL) {
+                printf("\nKnjiga je uspjesno pronadena.\n");
+                printf("\nID: %d\n", knjige[i].id);
+                printf("Naslov: %s\n", knjige[i].naslov);
+                printf("Zanr: %s\n", knjige[i].zanr);
+                printf("Godina izdanja: %d\n", knjige[i].godina);
+                printf("Autor: %s\n", knjige[i].autor);
+                printf("Posudena: %s\n", knjige[i].posudena ? "Da" : "Ne");
+                if (knjige[i].posudena) {
+                    printf("Korisnik: %s\n", knjige[i].korisnik);
+                }
+                printf("\n");
+            }
+        }
+        break;
+    case pretraziPoZanru:
+        printf("\nUnesite žanr knjige za pretragu: ");
+        fgets(pojam, sizeof(pojam), stdin);
+        pojam[strcspn(pojam, "\n")] = 0;
+        for (int i = 0; i < brojKnjiga; i++) {
+            if (strstr(knjige[i].zanr, pojam) != NULL) {
+                printf("\nKnjiga je uspjesno pronadena.\n");
+                printf("\nID: %d\n", knjige[i].id);
+                printf("Naslov: %s\n", knjige[i].naslov);
+                printf("Zanr: %s\n", knjige[i].zanr);
+                printf("Godina izdanja: %d\n", knjige[i].godina);
+                printf("Autor: %s\n", knjige[i].autor);
+                printf("Posudena: %s\n", knjige[i].posudena ? "Da" : "Ne");
+                if (knjige[i].posudena) {
+                    printf("Korisnik: %s\n", knjige[i].korisnik);
+                }
+                printf("\n");
+            }
+        }
+        break;
+    case pretraziPoId:
+        printf("\nUnesite ID knjige za pretragu: ");
+        int id;
+        if (scanf("%d", &id) != 1) {
+            printf("Neispravan unos ID-a.\n");
+            free(knjige);
+            return;
+        }
+        for (int i = 0; i < brojKnjiga; i++) {
+            if (knjige[i].id == id) {
+                printf("\nKnjiga je uspjesno pronadena.\n");
+                printf("\nID: %d\n", knjige[i].id);
+                printf("Naslov: %s\n", knjige[i].naslov);
+                printf("Zanr: %s\n", knjige[i].zanr);
+                printf("Godina izdanja: %d\n", knjige[i].godina);
+                printf("Autor: %s\n", knjige[i].autor);
+                printf("Posudena: %s\n", knjige[i].posudena ? "Da" : "Ne");
+                if (knjige[i].posudena) {
+                    printf("Korisnik: %s\n", knjige[i].korisnik);
+                }
+                printf("\n");
+                break;
+            }
+        }
+        break;
+    default:
+        printf("\nNepoznata opcija. Prekid pretrage.\n");
+        break;
     }
 
     free(knjige);
