@@ -5,6 +5,10 @@
 #include "header.h"
 #include "header1.h"
 
+int compareByTitle(const void* a, const void* b) {
+    return strcmp(((KNJIGA*)a)->naslov, ((KNJIGA*)b)->naslov);
+}
+
 void dodajKnjigu() {
     FILE* fp = fopen("knjiznica.bin", "ab");
     if (fp == NULL) {
@@ -100,8 +104,7 @@ void obrisiKnjigu() {
 
     if (!pronadenaKnjiga) {
         printf("Knjiga s ID-om %d nije pronadjena.\n", id);
-    }
-    else {
+    } else {
         printf("Knjiga je uspjesno obrisana.\n");
     }
 
@@ -180,30 +183,32 @@ void pretrazivanjeKnjiga() {
         return;
     }
 
+    // Sortiranje knjiga po naslovu
+    qsort(knjige, brojKnjiga, sizeof(KNJIGA), compareByTitle);
+
     char pojam[50];
-    printf("Unesite pojam za pretragu (Naslov, autor ili zanr) : ");
+    printf("Unesite naslov knjige za pretragu: ");
     clearInputBuffer();
     fgets(pojam, sizeof(pojam), stdin);
     pojam[strcspn(pojam, "\n")] = 0;
 
-    int pronadeno = 0;
-    for (int i = 0; i < brojKnjiga; i++) {
-        if (strstr(knjige[i].naslov, pojam) || strstr(knjige[i].zanr, pojam) || strstr(knjige[i].autor, pojam)) {
-            printf("\nID: %d\n", knjige[i].id);
-            printf("Naslov: %s\n", knjige[i].naslov);
-            printf("Zanr: %s\n", knjige[i].zanr);
-            printf("Godina izdanja: %d\n", knjige[i].godina);
-            printf("Autor: %s\n", knjige[i].autor);
-            printf("Posudena: %s\n", knjige[i].posudena ? "Da" : "Ne");
-            if (knjige[i].posudena) {
-                printf("Korisnik: %s\n", knjige[i].korisnik);
-            }
-            pronadeno = 1;
-        }
-    }
+    KNJIGA key;
+    strcpy(key.naslov, pojam);
 
-    if (!pronadeno) {
-        printf("Nema knjiga koje zadovoljavaju pretragu.\n");
+    KNJIGA* found = (KNJIGA*)bsearch(&key, knjige, brojKnjiga, sizeof(KNJIGA), compareByTitle);
+
+    if (found != NULL) {
+        printf("\nID: %d\n", found->id);
+        printf("Naslov: %s\n", found->naslov);
+        printf("Zanr: %s\n", found->zanr);
+        printf("Godina izdanja: %d\n", found->godina);
+        printf("Autor: %s\n", found->autor);
+        printf("Posudena: %s\n", found->posudena ? "Da" : "Ne");
+        if (found->posudena) {
+            printf("Korisnik: %s\n", found->korisnik);
+        }
+    } else {
+        printf("Knjiga s naslovom \"%s\" nije pronadjena.\n", pojam);
     }
 
     free(knjige);
@@ -253,14 +258,13 @@ void sortirajKnjigePoNaslovu() {
         return;
     }
 
-    for (int i = 0; i < brojKnjiga; i++) {
-        fwrite(&knjige[i], sizeof(KNJIGA), 1, fp);
-    }
+    fwrite(knjige, sizeof(KNJIGA), brojKnjiga, fp);
     fclose(fp);
 
-    printf("Knjige su uspjesno sortirane.\n");
     free(knjige);
+    printf("Knjige su uspjesno sortirane po naslovu.\n");
 }
+
 
 void posudbaKnjige() {
     FILE* fp = fopen("knjiznica.bin", "rb+");
